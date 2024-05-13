@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import dayjs from 'dayjs';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import RouterManager from './routers/index.js';
+import RouterManagers from './routers/index.js';
 
 const app = express();
 
@@ -15,8 +15,8 @@ app.use(express.urlencoded({ extended: true, limit: '700mb' })); // 700 메가�
 app.use(express.json());
 
 // router 등록
-RouterManager.forEach(router => {
-  app.use(router.path, router.router);
+RouterManagers.forEach(manager => {
+  app.use(manager.path, manager.router);
 });
 
 app.listen(8000, () => {

@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import UserController from '../controllers/users.js';
+import { CommonRouter } from './common-router.js';
+
 // import { getUsers } from '../controllers/users.js';
 
-class Users {
-  constructor() {
-    this.router = Router();
-    this.path = '/users';
+class UserRouter extends CommonRouter{
+  constructor(path) {
+    super(path)
     this.users = [
       {
         id: 1,
@@ -32,8 +33,8 @@ class Users {
   // };
 }
 
-const UsersRouter = new Users();
-export default UsersRouter;
+const userRouter = new UserRouter('/users');
+export default userRouter;
 
 // const routers = Router();
 //
