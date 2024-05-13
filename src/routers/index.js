@@ -1,4 +1,4 @@
-import UserRouter from './users.js';
-import PostRouter from './posts.js';
+import UsersRouter from './users.js';
+import PostsRouter from './posts.js';
 
-export default [UserRouter, PostRouter];
+export default [UsersRouter, PostsRouter];

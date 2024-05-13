@@ -1,7 +1,7 @@
 import { CommonRouter } from './common-router.js';
-import PostController from '../controllers/posts.js';
+import PostsController from '../controllers/posts.js';
 
-class PostRouter extends CommonRouter {
+class PostsRouter extends CommonRouter {
   constructor(path) {
     super(path);
     this.posts = [
@@ -15,9 +15,9 @@ class PostRouter extends CommonRouter {
   }
 
   init() {
-    this.router.get('/', PostController.getPosts.bind(this));
+    this.router.get('/', PostsController.getPosts.bind(this));
   }
 }
 
-const postRouter = new PostRouter('/posts');
-export default postRouter;
+const postsRouter = new PostsRouter('/posts');
+export default postsRouter;
