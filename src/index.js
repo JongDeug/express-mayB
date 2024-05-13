@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import UserRouter from '../router/users.js';
 import dayjs from 'dayjs';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import RouterManager from './routers/index.js';
 
 const app = express();
 
@@ -14,10 +14,10 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: true, limit: '700mb' })); // 700 메가바이트
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('dkdkddk');
+// router 등록
+RouterManager.forEach(router => {
+  app.use(router.path, router.router);
 });
-app.use('/users', UserRouter.router);
 
 app.listen(8000, () => {
   console.log('Server is running on port 8000');
