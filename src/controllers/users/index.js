@@ -1,6 +1,10 @@
+import { UserDTO, CreateUserDTO } from './dto/index.js';
+
 function getUsers(req, res, next) {
   try {
-    // res.status(200).json({ users: this.users });
+    const users = this.users.map(user => new UserDTO(user))
+    // console.log(users[0].getFullName()) => 객체가 된다!
+    res.status(200).json({ users });
     // throw new Error('test');
   } catch (err) {
     next(err);
@@ -30,7 +34,26 @@ function getUser(req, res, next) {
   }
 }
 
+function createUser(req, res, next) {
+  try {
+    const { name, age } = req.body;
+
+    if (!name) {
+      throw { status: 400, message: '이름이 없습니다.' };
+    }
+
+    const user = new CreateUserDTO(name, age).getNewUser();
+
+    this.users.push(user);
+
+    res.status(201).json({ users: this.users });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export default {
   getUsers,
   getUser,
+  createUser
 };
