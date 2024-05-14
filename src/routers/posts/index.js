@@ -1,5 +1,5 @@
-import { CommonRouter } from './common-router.js';
-import PostsController from '../controllers/posts.js';
+import { CommonRouter } from '../common-router.js';
+import PostsController from '../../controllers/posts.js';
 
 class PostsRouter extends CommonRouter {
   constructor(path) {

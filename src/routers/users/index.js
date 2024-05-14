@@ -1,16 +1,26 @@
 import { Router } from 'express';
-import UsersController from '../controllers/users.js';
-import { CommonRouter } from './common-router.js';
+import UsersController from '../../controllers/users.js';
+import { CommonRouter } from '../common-router.js';
 
-// import { getUsers } from '../controllers/users.js';
+// import { getUsers } from '../controllers/index.js';
 
-class UsersRouter extends CommonRouter{
+class UsersRouter extends CommonRouter {
   constructor(path) {
-    super(path)
+    super(path);
     this.users = [
       {
         id: 1,
         name: 'jongdeug',
+        age: 12,
+      },
+      {
+        id: 2,
+        name: 'test2',
+        age: 12,
+      },
+      {
+        id: 3,
+        name: 'test3',
         age: 12,
       },
     ];
@@ -19,6 +29,7 @@ class UsersRouter extends CommonRouter{
 
   init() {
     this.router.get('/', UsersController.getUsers.bind(this));
+    this.router.get('/:id', UsersController.getUser.bind(this));
     // this.router.get('/', getUsers); // 이건 안됨 => 여기서 렉시컬 환경의 상위는 전역이더라
     // this.routers.get('/', this.getUsers.bind(this)); // 이건 함수를 실행해서 넘긴게 아니고, 콜백으로 함수만 넘겼으니까 지정해줘야한다.
   }

@@ -608,6 +608,7 @@ __metadata:
     jsonwebtoken: "npm:^9.0.2"
     nodemon: "npm:^3.1.0"
     prettier: "npm:^3.2.5"
+    swagger-ui-express: "npm:^5.0.0"
   languageName: unknown
   linkType: soft
 
@@ -1965,6 +1966,24 @@ __metadata:
   dependencies:
     has-flag: "npm:^3.0.0"
   checksum: 10c0/6ae5ff319bfbb021f8a86da8ea1f8db52fac8bd4d499492e30ec17095b58af11f0c55f8577390a749b1c4dde691b6a0315dab78f5f54c9b3d83f8fb5905c1c05
+  languageName: node
+  linkType: hard
+
+"swagger-ui-dist@npm:>=5.0.0":
+  version: 5.17.9
+  resolution: "swagger-ui-dist@npm:5.17.9"
+  checksum: 10c0/bf422c6bcd9cddbb59179e83bb635203606fc36548108cd5167d04bccd29863b4c0a24ffa2e4c460c1a6e12dc3d2e209e6ab2ae05dfb71bd3288cf6acd608f31
+  languageName: node
+  linkType: hard
+
+"swagger-ui-express@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "swagger-ui-express@npm:5.0.0"
+  dependencies:
+    swagger-ui-dist: "npm:>=5.0.0"
+  peerDependencies:
+    express: ">=4.0.0 || >=5.0.0-beta"
+  checksum: 10c0/9f4c1f249cc613d687a80a1d5c60e8acf69145aa7dd573138b19902a7556396b9b2e7262eab69764d7d0ef14ae6f50214e701bd01a18fcf3b7776589d78b1c0b
   languageName: node
   linkType: hard
 
