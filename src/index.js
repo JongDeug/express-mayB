@@ -13,11 +13,12 @@ import database from './database.js';
   await database.$connect(); // await database.$disconnect()
 
 
-// use는 미들웨어, 라우터에 사용
+  // use는 미들웨어, 라우터에 사용
   app.use(cors({ origin: '*' })); // localhost 에서 작동 X
   app.use(helmet());
   app.use(express.urlencoded({ extended: true, limit: '700mb' })); // 700 메가바이트
   app.use(express.json());
+  // app.use(pagination) => 라우터 단위로 넣을거임
 
   // router 등록
   RouterManager.forEach(_router => {

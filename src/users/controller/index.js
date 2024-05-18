@@ -1,23 +1,88 @@
 import { Router } from 'express';
+import { UserService } from '../service/index.js';
+import { pagination } from '../../middleware/pagination.js';
+import { CreateUserDto, UpdateUserDto, UserDto } from '../dto/index.js';
 
 class UserController {
-  constructor(path) {
+  constructor() {
     this.router = Router();
-    this.path = path;
+    this.path = '/users';
+    this.userService = new UserService();
     this.init();
   }
 
   init() {
-    this.router.get('/', this.getUsers);
+    this.router.get('/', pagination, this.getUsers);
+    this.router.get('/detail/:id', this.getUser);
+    this.router.post('/', this.createUser);
+    this.router.post('/', this.updateUser);
+    this.router.post('/', this.deleteUser);
   }
 
-  getUsers() {
+  getUsers = async (req, res, next) => {
+    try {
+      console.log(req.skip, req.take);
+      const { users, count } = await this.userService.findUsers({
+        skip: req.skip,
+        take: req.take,
+      });
 
-  }
+      console.log(users, count);
+
+      res.status(200).json({ users, count });
+      // res.status(200).json({ users: users.map((user) => new UserDto(user)), count });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  getUser = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const user = await this.userService.findUserById(id);
+
+      res.status(200).json({ user: new UserDto(user) });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  createUser = async (req, res, next) => {
+    try {
+      const createUserDto = new CreateUserDto(req.body);
+      const newUserId = await this.userService.createUser(createUserDto);
+      // 201 created
+      res.status(201).json({ id: newUserId });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  updateUser = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const updateUserDto = new UpdateUserDto(req.body);
+      await this.userService.updateUser(id, updateUserDto);
+
+      req.status(204).json({});
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  deleteUser = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await this.userService.deleteUser(id);
+
+      res.status(204).json({});
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
-export default new UserController('/users');
-
+export default new UserController();
 
 
 // import { UserDTO, CreateUserDTO } from '../dto/index.js';
