@@ -11,10 +11,10 @@
 
 #!.yarn/cache
 .pnp.*
+
+# 프리즈마 사용 ! 굳
+./prisma
+!./prisma/schema.prisma
 .idea
 mysql-data
 .env
-
-# 프리즈마 사용 ! 굳
-prisma
-!prisma/schema.prisma
