@@ -19,9 +19,10 @@ model User {
   id String @id @default(uuid())
 
   name        String @db.VarChar(200)
-  email       String @db.VarChar(200)
+  email       String @db.VarChar(200) @unique
   phoneNumber String @db.Char(11)
   age         Int
+  password String
 
   post Post[]
 }
