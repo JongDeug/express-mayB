@@ -44,9 +44,10 @@ export class UserService {
       data: {
         name: props.name,
         email: props.email,
-        age: props.age,
+        // age: props.age,
         phoneNumber: props.phoneNumber,
         password: props.password,
+        description: props.description,
       },
     });
 
@@ -63,6 +64,11 @@ export class UserService {
 
     if (!isExist) throw { status: 404, message: '유저를 찾을 수 없습니다.' };
 
+    // password가 있다면 bcrypt로 변환함
+    if (props.password) {
+      await props.updatePassword();
+    }
+
     await database.user.update({
       where: {
         id,
@@ -71,9 +77,10 @@ export class UserService {
       data: {
         name: props.name,
         email: props.email,
-        age: props.age,
+        // age: props.age,
         phoneNumber: props.phoneNumber,
         password: props.password,
+        description: props.description,
       },
     });
   }

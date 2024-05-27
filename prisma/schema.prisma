@@ -22,6 +22,7 @@ model User {
   email       String @unique @db.VarChar(200)
   phoneNumber String @db.Char(11)
   password    String
+  description String? @db.VarChar(300)
 
   posts     Post[]
   comments  Comment[]
@@ -39,7 +40,7 @@ model Post {
 
   comments  Comment[]
   postLikes PostLike[]
-  Tag       Tag[]
+  tags Tag[]
 }
 
 model Comment {
