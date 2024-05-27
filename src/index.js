@@ -1,28 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import RouterManager from './controllers/index.js';
+import { RouterManager } from './models/index.js';
 import { swaggerDocs, options } from './swagger/index.js';
 import swaggerUi from 'swagger-ui-express';
 import database from './database.js';
-import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
 
-dotenv.config();
-
-const password = '12345';
 // 오 즉시 실행 함수
 (async () => {
   const app = express();
   await database.$connect(); // await database.$disconnect()
-
-  const salt = Number(process.env.PASSWORD_SALT);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  console.log({ hashedPassword });
-
-  const isCorrect = await bcrypt.compare('123', hashedPassword);
-  console.log({ isCorrect });
-
 
   // use는 미들웨어, 라우터에 사용
   app.use(cors({ origin: '*' })); // localhost 에서 작동 X

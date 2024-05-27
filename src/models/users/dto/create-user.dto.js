@@ -4,5 +4,6 @@ export class CreateUserDto {
     this.name = user.name;
     this.phoneNumber = user.phoneNumber;
     this.email = user.email;
+    this.password = user.password;
   }
 }

@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { UserService } from '../service/index.js';
-import { pagination } from '../../middleware/pagination.js';
+import { pagination } from '../../../middleware/pagination.js';
 import { CreateUserDto, UpdateUserDto, UserDto } from '../dto/index.js';
+import { jwtAuth } from '../../../middleware/index.js';
 
 class UserController {
   constructor() {
@@ -12,22 +13,22 @@ class UserController {
   }
 
   init() {
-    this.router.get('/', pagination, this.getUsers);
-    this.router.get('/detail/:id', this.getUser);
-    this.router.post('/', this.createUser);
-    this.router.post('/', this.updateUser);
-    this.router.post('/', this.deleteUser);
+    this.router.get('/', jwtAuth, pagination, this.getUsers);
+    this.router.get('/detail/:id', jwtAuth, this.getUser);
+    this.router.post('/', jwtAuth, this.createUser);
+    this.router.post('/', jwtAuth, this.updateUser);
+    this.router.post('/', jwtAuth, this.deleteUser);
   }
 
   getUsers = async (req, res, next) => {
     try {
-      console.log(req.skip, req.take);
+      // console.log(req.skip, req.take);
       const { users, count } = await this.userService.findUsers({
         skip: req.skip,
         take: req.take,
       });
 
-      console.log(users, count);
+      // console.log(users, count);
 
       res.status(200).json({ users, count });
       // res.status(200).json({ users: users.map((user) => new UserDto(user)), count });

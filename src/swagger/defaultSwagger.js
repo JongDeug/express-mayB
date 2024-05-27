@@ -10,6 +10,15 @@ const defaultSwagger = {
       url: 'http://localhost:8000',
     },
   ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
+  },
 };
 
 export default defaultSwagger;

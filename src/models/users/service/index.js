@@ -1,6 +1,17 @@
-import database from '../../database.js';
+import database from '../../../database.js';
 
 export class UserService {
+
+  async checkUserByEmail(email) {
+    const user = await database.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) return false;
+    return user;
+  }
 
   async findUserById(id) {
     const user = await database.user.findUnique({
@@ -35,6 +46,7 @@ export class UserService {
         email: props.email,
         age: props.age,
         phoneNumber: props.phoneNumber,
+        password: props.password,
       },
     });
 
@@ -61,6 +73,7 @@ export class UserService {
         email: props.email,
         age: props.age,
         phoneNumber: props.phoneNumber,
+        password: props.password,
       },
     });
   }

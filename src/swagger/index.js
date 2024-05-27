@@ -1,9 +1,5 @@
 import defaultSwagger from './defaultSwagger.js';
-import * as UserSwagger from '../users/swagger.js';
-
-const Swaggers = {
-  UserSwagger,
-};
+import { Swaggers } from '../models/index.js';
 
 // console.log(Swaggers);
 
