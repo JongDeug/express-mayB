@@ -13,6 +13,7 @@ export class AuthController {
   init() {
     this.router.post('/register', this.register.bind(this));
     this.router.post('/login', this.login.bind(this));
+    this.router.post('/refresh', this.refresh.bind(this));
   }
 
   async register(req, res, next) {
@@ -35,6 +36,19 @@ export class AuthController {
       const { accessToken, refreshToken } = await this.authService.login(
         new LoginDto(req.body),
       );
+
+      res.status(200).json({
+        accessToken,
+        refreshToken,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async refresh(req, res, next) {
+    try {
+      const { accessToken, refreshToken } = await this.authService.refresh(req.body.accessToken, req.body.refreshToken);
 
       res.status(200).json({
         accessToken,

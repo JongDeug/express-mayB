@@ -61,4 +61,43 @@ export class AuthService {
       refreshToken,
     };
   }
+
+  async refresh(accessToken, refreshToken) {
+    const accessTokenPayload = jwt.verify(
+      accessToken,
+      process.env.JWT_KEY,
+      { ignoreExpiration: true },
+    );
+
+    const refreshTokenPayload = jwt.verify(
+      refreshToken,
+      process.env.JWT_KEY,
+    );
+
+    // 검증을 몇가지 할거다
+    if (accessTokenPayload.id !== refreshTokenPayload.id) {
+      throw { status: 403, message: '권한이 없습니다. ' };
+    }
+
+    // 유저 찾기
+    const user = await this.userService.findUserById(accessTokenPayload.id);
+
+    const newAccessToken = jwt.sign(
+      { id: user.id },
+      process.env.JWT_KEY,
+      { expiresIn: '2h' },
+    );
+
+    // I. 근데 굳이 refresh 토큰까지 새로 발급해줄 필요가 있나?
+    const newRefreshToken = jwt.sign(
+      { id: user.id },
+      process.env.JWT_KEY,
+      { expiresIn: '14d' },
+    );
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    }
+  }
 }
