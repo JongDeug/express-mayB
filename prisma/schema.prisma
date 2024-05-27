@@ -7,7 +7,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output = "./generate"
+  output   = "./generate"
 }
 
 datasource db {
@@ -19,21 +19,63 @@ model User {
   id String @id @default(uuid())
 
   name        String @db.VarChar(200)
-  email       String @db.VarChar(200) @unique
+  email       String @unique @db.VarChar(200)
   phoneNumber String @db.Char(11)
-  age         Int
-  password String
+  password    String
 
-  post Post[]
+  posts     Post[]
+  comments  Comment[]
+  postLikes PostLike[]
 }
 
 model Post {
-  id      String @id @default(uuid())
-  title   String @db.VarChar(200)
-  content String @db.LongText
+  id        String   @id @default(uuid())
+  title     String   @db.VarChar(200)
+  content   String   @db.LongText
+  createdAt DateTime @default(now())
 
   userId String // foreign key
   user   User   @relation(fields: [userId], references: [id])
+
+  comments  Comment[]
+  postLikes PostLike[]
+  Tag       Tag[]
+}
+
+model Comment {
+  id String @id @default(uuid())
+
+  content String @db.VarChar(300)
+
+  parentCommentId String? // FK, null 값 허용
+  // 어떤 놈을 foreign key 로 쓸꺼냐 => fields
+  // references 는 자식 => id
+  // 자기 자신을 참조하면 첫 번 째 인자로 string값을 넣어줘야한다.
+  parentComment   Comment?  @relation("parentComment", fields: [parentCommentId], references: [id])
+  childComments   Comment[] @relation("parentComment")
+
+  userId String // FK
+  user   User   @relation(fields: [userId], references: [id])
+  postId String // FK
+  post   Post   @relation(fields: [postId], references: [id])
+}
+
+model PostLike {
+  userId String // FK
+  user   User   @relation(fields: [userId], references: [id])
+  postId String  // FK
+  post   Post   @relation(fields: [postId], references: [id])
+
+  @@id([userId, postId])
+}
+
+model Tag {
+  id String @id @default(uuid())
+
+  name String @db.VarChar(120)
+
+  postId String // FK
+  post   Post   @relation(fields: [postId], references: [id])
 }
 
 // 만약 one to one 관계라면 ?, 배열 지우고, 유니크 넣어야함. 중복되지 않으므로
@@ -56,3 +98,4 @@ model Post {
 //   userId String @unique // foreign key
 //   user   User   @relation(fields: [userId], references: [id])
 // }
+
