@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { UserService } from '../service/index.js';
 import { pagination } from '../../../middleware/pagination.js';
 import { CreateUserDto, UpdateUserDto, UserDto } from '../dto/index.js';
-import { jwtAuth } from '../../../middleware/index.js';
 
 class UserController {
   constructor() {
@@ -13,11 +12,11 @@ class UserController {
   }
 
   init() {
-    this.router.get('/', jwtAuth, pagination, this.getUsers);
-    this.router.get('/detail/:id', jwtAuth, this.getUser);
-    this.router.post('/', jwtAuth, this.createUser);
-    this.router.post('/', jwtAuth, this.updateUser);
-    this.router.post('/', jwtAuth, this.deleteUser);
+    this.router.get('/', pagination, this.getUsers);
+    this.router.get('/detail/:id', this.getUser);
+    this.router.post('/', this.createUser);
+    this.router.post('/', this.updateUser);
+    this.router.post('/', this.deleteUser);
   }
 
   getUsers = async (req, res, next) => {

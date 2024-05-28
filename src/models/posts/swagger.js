@@ -1,28 +1,30 @@
-export const register = {
-  '/auth/register': {
+export const createPost = {
+  '/posts': {
     post: {
-      tags: ['Auth'],
-      summary: '회원가입',
+      tags: ['Post'],
+      summary: '게시글 생성',
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
       requestBody: {
         content: {
           'application/json': {
             schema: {
               type: 'object',
               properties: {
-                name: {
+                title: {
                   type: 'string',
                 },
-                description: {
+                content: {
                   type: 'string',
                 },
-                email: {
-                  type: 'string',
-                },
-                phoneNumber: {
-                  type: 'string',
-                },
-                password: {
-                  type: 'string',
+                tags: {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                  },
                 },
               },
             },
@@ -30,16 +32,13 @@ export const register = {
         },
       },
       responses: {
-        200: {
+        201: {
           content: {
             'application/json': {
               schema: {
                 type: 'object',
                 properties: {
-                  accessToken: {
-                    type: 'string',
-                  },
-                  refreshToken: {
+                  id: {
                     type: 'string',
                   },
                 },
@@ -52,21 +51,26 @@ export const register = {
   },
 };
 
-export const login = {
-  '/auth/login': {
+export const createComment = {
+  '/posts/comments': {
     post: {
-      tags: ['Auth'],
-      summary: '로그인',
+      tags: ['Post'],
+      summary: '댓글 생성',
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
       requestBody: {
         content: {
           'application/json': {
             schema: {
               type: 'object',
               properties: {
-                email: {
+                content: {
                   type: 'string',
                 },
-                password: {
+                postId: {
                   type: 'string',
                 },
               },
@@ -75,16 +79,13 @@ export const login = {
         },
       },
       responses: {
-        200: {
+        201: {
           content: {
             'application/json': {
               schema: {
                 type: 'object',
                 properties: {
-                  accessToken: {
-                    type: 'string',
-                  },
-                  refreshToken: {
+                  id: {
                     type: 'string',
                   },
                 },
@@ -97,21 +98,26 @@ export const login = {
   },
 };
 
-export const refresh = {
-  '/auth/refresh': {
+export const createChildComment = {
+  '/posts/child-comments': {
     post: {
-      tags: ['Auth'],
-      summary: '토큰 초기화',
+      tags: ['Post'],
+      summary: '자식 댓글 생성',
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
       requestBody: {
         content: {
           'application/json': {
             schema: {
               type: 'object',
               properties: {
-                accessToken: {
+                content: {
                   type: 'string',
                 },
-                refreshToken: {
+                parentCommentId: {
                   type: 'string',
                 },
               },
@@ -120,16 +126,13 @@ export const refresh = {
         },
       },
       responses: {
-        200: {
+        201: {
           content: {
             'application/json': {
               schema: {
                 type: 'object',
                 properties: {
-                  accessToken: {
-                    type: 'string',
-                  },
-                  refreshToken: {
+                  id: {
                     type: 'string',
                   },
                 },

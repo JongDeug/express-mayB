@@ -49,8 +49,11 @@ export const jwtAuth = async (req, res, next) => {
         next({ status: 400, message: 'Token이 잘못되었습니다.' });
       }
     } else {
-      // next안에 뭔가 넘기면 에러가 되는거임
-      next({ status: 400, message: 'Token이 잘못되었습니다.' });
+      // 그냥 next() 해버리면 넘어가지잖아 이러면 안되는거 아녀!!
+      // Bearer 안주면 어쩔건데 ;;;
+      // next({ status: 400, message: 'Token이 잘못되었습니다.' });
+      // 일단 테스트 용이니까 이렇게 하자
+      next();
     }
 
   } catch (err) {

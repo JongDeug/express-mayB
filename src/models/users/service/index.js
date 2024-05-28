@@ -44,7 +44,6 @@ export class UserService {
       data: {
         name: props.name,
         email: props.email,
-        // age: props.age,
         phoneNumber: props.phoneNumber,
         password: props.password,
         description: props.description,

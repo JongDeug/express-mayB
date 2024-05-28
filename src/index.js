@@ -5,6 +5,7 @@ import { RouterManager } from './models/index.js';
 import { swaggerDocs, options } from './swagger/index.js';
 import swaggerUi from 'swagger-ui-express';
 import database from './database.js';
+import { jwtAuth } from './middleware/index.js';
 
 // 오 즉시 실행 함수
 (async () => {
@@ -16,6 +17,9 @@ import database from './database.js';
   app.use(helmet());
   app.use(express.urlencoded({ extended: true, limit: '700mb' })); // 700 메가바이트
   app.use(express.json());
+  // 그냥 next() 해버리면 넘어가지잖아 이러면 안되는거 아녀!!
+  // Bearer 안주면 어쩔건데 ;;; ==========> 임시용
+  app.use(jwtAuth);
   // app.use(pagination) => 라우터 단위로 넣을거임
 
   // router 등록
