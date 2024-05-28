@@ -97,11 +97,11 @@ export class PostService {
   // 게시글 목록 불러오기
   // 게시글 찾을 수도 있네!!
   async getPosts({ skip, take }, searchValue) {
-    console.log(searchValue)
+    console.log(searchValue);
     const posts = await database.post.findMany({
       where: {
         title: {
-          contains: searchValue ?? "",
+          contains: searchValue ?? '',
         },
       },
       include: {
@@ -119,7 +119,7 @@ export class PostService {
       // 얘도 같이
       where: {
         title: {
-          contains: searchValue ?? "",
+          contains: searchValue ?? '',
         },
       },
     });
@@ -131,7 +131,7 @@ export class PostService {
   }
 
   // 게시글 자세히 불러오기(댓글, 태그 포함)
-  async getPost(id) {
+  async getPost(id, user) {
     const post = await database.post.findUnique({
       where: {
         id,
@@ -149,12 +149,14 @@ export class PostService {
         },
         tags: true,
         user: true,
+        postLikes: true,
       },
     });
 
+    // console.log(post, user)
     if (!post) throw { status: 404, message: '게시글을 찾을 수 없습니다.' };
 
-    return new PostDto(post);
+    return new PostDto(post, user);
   }
 
   // 게시글 좋아요 생성

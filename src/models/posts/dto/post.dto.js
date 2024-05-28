@@ -3,7 +3,7 @@ import { TagDto } from './tag/index.js';
 import { CommentDto } from './comment/index.js';
 
 export class PostDto {
-  constructor(props) {
+  constructor(props, user) {
     this.title = props.title;
     this.content = props.content;
     this.createdAt = props.createdAt;
@@ -15,5 +15,7 @@ export class PostDto {
       user: comment.user,
     }));
     this.tags = props.tags.map(tag => new TagDto({ id: tag.id, name: tag.name }));
+    this.likeCount = props.postLikes.length;
+    this.isLiked = user ? !!props.postLikes.find(like => like.userId === user.id) : false;
   }
 }
