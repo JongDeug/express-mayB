@@ -279,4 +279,91 @@ export class PostService {
       });
     }
   }
+
+  // 게시글 수정하기  props: UpdateDto
+  async updatePost(props) {
+    const user = await this.userService.findUserById(props.userId);
+    const post = await database.post.findUnique({
+      where: {
+        id: props.postId,
+      },
+    });
+
+    if (!post) throw { status: 404, message: '게시글을 찾을 수 없습니다.' };
+
+    // 다르면 권한 없음
+    if (user.id !== post.userId) {
+      throw { status: 403, message: '권한이 없음' };
+    }
+
+    // 태그 변경
+    if (props.tags) {
+      // 1. 태그를 모두 삭제하고, 새로 수정한 태그로 교체
+      // 2. 기존에 있는 태그에서 중복되는 값만 제외하고 교체
+      // 첫번째 쓴다잉~
+
+      await database.tag.deleteMany({
+        where: {
+          postId: props.postId,
+        },
+      });
+
+      await database.tag.createMany({
+        data: props.tags.map(tag => ({
+          name: tag,
+          post: {
+            connect: {
+              id: post.id,
+            },
+          },
+        })),
+      });
+    }
+
+    await database.post.update({
+      where: {
+        id: post.id,
+      },
+      data: {
+        title: props.title,
+        content: props.content,
+        // tags는 어떻게 바꿀 수 있을까 ? ********************
+        // => 요롷게! 근데 무조건 tags가 존재한다는 가정이 있어야 사용가능
+        // tags: {
+        //   deleteMany: {
+        //     postId: post.id,
+        //   },
+        //   createMany: {
+        //     data: props.tags.map(tag => ({
+        //       name: tag,
+        //     })),
+        //   },
+        // },
+      },
+    });
+  }
+
+  // 댓글 수정하기  props: UpdateCommentDto
+  async updateComment(props) {
+    const user = await this.userService.findUserById(props.userId);
+    const comment = await database.comment.findUnique({
+      where: {
+        id: props.id,
+      },
+    });
+
+    if (!comment) throw { status: 404, message: '댓글을 찾을 수 없습니다.' };
+
+    // 권한 없음
+    if (user.id !== comment.userId) throw { status: 404, message: '권한이 없음' };
+
+    await database.comment.update({
+      where: {
+        id: comment.id,
+      },
+      data: {
+        content: props.content,
+      },
+    });
+  }
 }

@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { PostService } from '../service/index.js';
-import { CreateChildCommentDto, CreateCommentDto, CreatePostDto, PostLikeDto } from '../dto/index.js';
+import { CreateChildCommentDto, CreateCommentDto, CreatePostDto, PostLikeDto, UpdatePostDto } from '../dto/index.js';
 import { pagination } from '../../../middleware/pagination.js';
+import { UpdateCommentDto } from '../dto/comment/index.js';
 
 class PostController {
 
@@ -21,6 +22,8 @@ class PostController {
     this.router.get('/post-like/:id', this.createPostLike.bind(this));
     this.router.delete('/post-like/:id', this.deletePostLike.bind(this));
     this.router.post('/post-like', this.postLike.bind(this));
+    this.router.patch('/:id', this.updatePost.bind(this));
+    this.router.patch('/comments/:id', this.updateComment.bind(this));
   }
 
   async createPost(req, res, next) {
@@ -139,6 +142,44 @@ class PostController {
       );
 
       res.status(201).json({});
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async updatePost(req, res, next) {
+    try {
+      if (!req.user) throw { status: 401, message: '로그인을 진행해주세요' };
+      const { id } = req.params;
+
+      await this.postService.updatePost(
+        new UpdatePostDto({
+          postId: id,
+          userId: req.user.id,
+          ...req.body,
+        }),
+      );
+
+      res.status(204).json({});
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async updateComment(req, res, next) {
+    try {
+      if (!req.user) throw { status: 401, message: '로그인을 진행해주세요' };
+      const { id } = req.params;
+
+      await this.postService.updateComment(
+        new UpdateCommentDto({
+          id,
+          userId: req.user.id,
+          content: req.body.content,
+        }),
+      );
+
+      res.status(204).json({});
     } catch (err) {
       next(err);
     }
