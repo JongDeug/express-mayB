@@ -366,4 +366,42 @@ export class PostService {
       },
     });
   }
+
+  // 게시글 삭제
+  async deletePost(postId, user) {
+    const post = await database.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
+
+    if (!post) throw { status: 404, message: '게시글을 찾을 수 없습니다.' };
+
+    if (post.userId !== user.id) throw { status: 404, message: '권한이 없음' };
+
+    await database.post.delete({
+      where: {
+        id: post.id,
+      },
+    });
+  }
+
+  // 댓글 삭제
+  async deleteComment(commentId, user) {
+    const comment = await database.comment.findUnique({
+      where: {
+        id: commentId,
+      },
+    });
+
+    if (!comment) throw { status: 404, message: '게시글을 찾을 수 없습니다.' };
+
+    if (comment.userId !== user.id) throw { status: 404, message: '권한이 없음' };
+
+    await database.comment.delete({
+      where: {
+        id: comment.id,
+      },
+    });
+  }
 }

@@ -24,6 +24,8 @@ class PostController {
     this.router.post('/post-like', this.postLike.bind(this));
     this.router.patch('/:id', this.updatePost.bind(this));
     this.router.patch('/comments/:id', this.updateComment.bind(this));
+    this.router.delete('/:id', this.deletePost.bind(this));
+    this.router.delete('/comments/:id', this.deleteComment.bind(this));
   }
 
   async createPost(req, res, next) {
@@ -178,6 +180,32 @@ class PostController {
           content: req.body.content,
         }),
       );
+
+      res.status(204).json({});
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async deletePost(req, res, next) {
+    try {
+      if (!req.user) throw { status: 401, message: '로그인을 진행해주세요' };
+      const { id } = req.params;
+
+      await this.postService.deletePost(id, req.user);
+
+      res.status(204).json({});
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async deleteComment(req, res, next) {
+    try {
+      if (!req.user) throw { status: 401, message: '로그인을 진행해주세요' };
+      const { id } = req.params;
+
+      await this.postService.deleteComment(id, req.user);
 
       res.status(204).json({});
     } catch (err) {
