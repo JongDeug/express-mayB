@@ -1,0 +1,11 @@
+{
+  "name": "http-server",
+  "packageManager": "yarn@4.2.2",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^3.1.2"
+  }
+}
